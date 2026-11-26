@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PolyGlider 3D</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #0a1128;
+    user-select: none;
+    font-family: monospace;
+  }
+  #display {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: crosshair;
+  }
+  #status-screenreader {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+<canvas id="display" width="1280" height="720" aria-label="PolyGlider 3D"></canvas>
+<p id="status-screenreader" role="status" aria-live="polite">PolyGlider active</p>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
