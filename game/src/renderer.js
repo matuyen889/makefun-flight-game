@@ -265,17 +265,45 @@ export class FlightRenderer {
         ctx.fill();
       }
 
-      // Afterburner Jet Flame
-      if (aero.throttle > 0.4) {
-        const flameLen = aero.throttle * 4.0;
-        const flameTip = tail.clone().sub(fwd.clone().scale(flameLen));
-        const pFlame = this.project(flameTip);
-        if (pFlame) {
-          ctx.strokeStyle = aero.throttle > 0.85 ? '#00d5ff' : COLOR_PALETTE.EXHAUST_GLOW;
-          ctx.lineWidth = 6;
+      // Twin Afterburner Jet Flames
+      if (aero.throttle > 0.3) {
+        const flameLen = aero.throttle * 5.5;
+        const flameTipL = tail.clone().add(right.clone().scale(-0.8)).sub(fwd.clone().scale(flameLen));
+        const flameTipR = tail.clone().add(right.clone().scale(0.8)).sub(fwd.clone().scale(flameLen));
+        const pFlameL = this.project(flameTipL);
+        const pFlameR = this.project(flameTipR);
+
+        if (pFlameL && pFlameR) {
+          ctx.strokeStyle = aero.throttle > 0.85 ? 'rgba(0, 229, 255, 0.9)' : 'rgba(255, 120, 20, 0.9)';
+          ctx.lineWidth = 7;
           ctx.beginPath();
-          ctx.moveTo(pTail.x, pTail.y);
-          ctx.lineTo(pFlame.x, pFlame.y);
+          ctx.moveTo(pTail.x - 3, pTail.y); ctx.lineTo(pFlameL.x, pFlameL.y);
+          ctx.moveTo(pTail.x + 3, pTail.y); ctx.lineTo(pFlameR.x, pFlameR.y);
+          ctx.stroke();
+
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(pTail.x - 3, pTail.y); ctx.lineTo(pFlameL.x, pFlameL.y);
+          ctx.moveTo(pTail.x + 3, pTail.y); ctx.lineTo(pFlameR.x, pFlameR.y);
+          ctx.stroke();
+        }
+      }
+
+      // Dynamic Wingtip Vortex Vapor Contrails
+      if (Math.abs(aero.rotation.z) > 0.2 || aero.throttle > 0.8) {
+        const trailLen = 16.0;
+        const trailTipL = wingLeft.clone().sub(fwd.clone().scale(trailLen)).add(new Vec3(0, 0.6, 0));
+        const trailTipR = wingRight.clone().sub(fwd.clone().scale(trailLen)).add(new Vec3(0, 0.6, 0));
+        const pTrailL = this.project(trailTipL);
+        const pTrailR = this.project(trailTipR);
+
+        if (pTrailL && pTrailR) {
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+          ctx.lineWidth = 3.5;
+          ctx.beginPath();
+          ctx.moveTo(pWLeft.x, pWLeft.y); ctx.lineTo(pTrailL.x, pTrailL.y);
+          ctx.moveTo(pWRight.x, pWRight.y); ctx.lineTo(pTrailR.x, pTrailR.y);
           ctx.stroke();
         }
       }
